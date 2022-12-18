@@ -16,12 +16,12 @@ class Graph : public IGraph {
 
   EdgeId add_edge(VertexId first_vertex_id, VertexId second_vertex_id) override;
 
-  const std::unordered_map<VertexId, std::shared_ptr<IVertex>>& vertices()
+  const std::unordered_map<VertexId, std::unique_ptr<IVertex>>& vertices()
       const override {
     return vertices_;
   };
 
-  const std::unordered_map<EdgeId, std::shared_ptr<IEdge>>& edges()
+  const std::unordered_map<EdgeId, std::unique_ptr<IEdge>>& edges()
       const override {
     return edges_;
   };
@@ -106,8 +106,8 @@ class Graph : public IGraph {
   std::unordered_map<VertexId, GraphDepth> depths_of_vertices_;
   std::vector<std::set<VertexId>> vertices_at_depth_;
   std::unordered_map<VertexId, std::vector<EdgeId>> adjacency_list_;
-  std::unordered_map<VertexId, std::shared_ptr<IVertex>> vertices_;
-  std::unordered_map<EdgeId, std::shared_ptr<IEdge>> edges_;
+  std::unordered_map<VertexId, std::unique_ptr<IVertex>> vertices_;
+  std::unordered_map<EdgeId, std::unique_ptr<IEdge>> edges_;
   VertexId last_vertex_id_ = 0;
   EdgeId last_edge_id_ = 0;
 };

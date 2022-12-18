@@ -24,7 +24,7 @@ class GraphGenerationController {
  private:
   using JobCallback = std::function<void()>;
 
-  class Worker {
+  class Worker : public IWorker {
    public:
     using GetJobCallback = std::function<std::optional<JobCallback>()>;
 

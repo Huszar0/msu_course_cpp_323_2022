@@ -7,8 +7,7 @@ namespace uni_course_cpp {
 
 VertexId Graph::add_vertex() {
   const VertexId new_id = get_new_vertex_id();
-  const std::shared_ptr<IVertex> new_vertex = std::make_shared<Vertex>(new_id);
-  vertices_.emplace(new_id, new_vertex);
+  vertices_.insert(std::make_pair(new_id, std::make_unique<Vertex>(new_id)));
   adjacency_list_.emplace(new_id, std::vector<EdgeId>{});
   set_vertex_depth(new_id, kGraphBaseDepth);
   return new_id;
@@ -27,9 +26,9 @@ EdgeId Graph::add_edge(VertexId from_vertex_id, VertexId to_vertex_id) {
   if (from_vertex_id != to_vertex_id) {
     adjacency_list_[to_vertex_id].emplace_back(new_id);
   }
-  const std::shared_ptr<IEdge> new_edge =
-      std::make_shared<Edge>(new_id, from_vertex_id, to_vertex_id, edge_color);
-  edges_.try_emplace(new_id, new_edge);
+  edges_.insert(
+      std::make_pair(new_id, std::make_unique<Edge>(new_id, from_vertex_id,
+                                                    to_vertex_id, edge_color)));
   if (colored_edge_ids_.find(edge_color) != colored_edge_ids_.end()) {
     colored_edge_ids_.at(edge_color).push_back(new_id);
   } else {
@@ -71,7 +70,7 @@ std::set<VertexId> Graph::children_of_vertex(VertexId vertex_id) const {
   const auto& edge_ids_of_vertex = adjacency_list_.at(vertex_id);
   std::set<VertexId> children_of_vertex;
   for (auto edge_id : edge_ids_of_vertex) {
-    const auto edge = edges_.at(edge_id);
+    const auto& edge = edges_.at(edge_id);
     if (edge->to_vertex_id() != vertex_id) {
       children_of_vertex.insert(edge->to_vertex_id());
     }

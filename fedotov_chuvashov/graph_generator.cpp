@@ -46,7 +46,7 @@ void generate_green_edges(Graph& graph, std::mutex& graph_mutex) {
   std::for_each(
       vertices.begin(), vertices.end(),
       [&graph, &graph_mutex](
-          const std::pair<VertexId, std::shared_ptr<IVertex>>& element) {
+          const std::pair<const VertexId, std::unique_ptr<IVertex>>& element) {
         VertexId vertex_id = element.first;
         if (check_probabilty(probabilty_of_green_edge)) {
           const std::lock_guard graph_guard(graph_mutex);
